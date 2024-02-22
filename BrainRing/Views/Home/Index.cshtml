@@ -1,0 +1,24 @@
+﻿@model BrainRing.Models.TeamAnswer;
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="container">
+    <form action="/Home/CreateUser" method="post">
+        <div class="form-label">
+            <label class="col-sm-2 col-form-label">Введите номер команды:</label>
+            <input name="command" type="number" value="@Model.Command" />
+        </div>
+        <div class="form-label">
+            <label class="col-sm-2 col-form-label">Номер вопроса:</label>
+            <input name="question" value="@Model.Question" />
+        </div>
+        <div class="form-label">
+            <label class="col-sm-2 col-form-label">Введите ответ:</label>
+            <input name="answer" value="@Model.Answer" />
+        </div>
+        <input type="submit" value="Отправить" />
+        <input type="button" value="Очистить" />
+    </form>
+</div>
