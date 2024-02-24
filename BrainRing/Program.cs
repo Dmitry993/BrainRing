@@ -1,13 +1,19 @@
-using BrainRing.Context;
+using BrainRing.Data.Context;
+using BrainRing.Interfaces;
+using BrainRing.Repositories;
+using BrainRing.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration["ConnectionStrings:SQLiteDB"];
+var connectionString = builder.Configuration.GetConnectionString("SQLiteDB");
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationContext>(options =>
     options.UseSqlite(connectionString));
+
+builder.Services.AddScoped<ITeamAnswerRepository, TeamAnswerRepository>();
+builder.Services.AddScoped<ITeamAnswerService, TeamAnswerService>();
 
 var app = builder.Build();
 

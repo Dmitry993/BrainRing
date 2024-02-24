@@ -1,24 +1,76 @@
-﻿@model BrainRing.Models.TeamAnswer;
+﻿@model BrainRing.ViewModels.TeamAnswerViewModel;
 
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Team Answer";
 }
 
-<div class="container">
-    <form action="/Home/CreateUser" method="post">
-        <div class="form-label">
-            <label class="col-sm-2 col-form-label">Введите номер команды:</label>
-            <input name="command" type="number" value="@Model.Command" />
+<div class="container" style="max-width: 800px;">
+    <form action="/Home/AddTeamAnswer" method="post" class="mt-3">
+        <div class="form-group row mb-3">
+            <label for="commandNum" class="col-sm-3 col-form-label">Введите номер команды:</label>
+            <div class="col-sm-9 input-group" style="max-width:500px; max-height:37px;">
+                <input name="commandNumber" onkeyup="success()" id="commandNum" value="@Model.CommandNumber" class="form-control">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" onclick="decrement()">-</button>
+                    <button class="btn btn-outline-secondary" type="button" onclick="increment()">+</button>
+                </div> 
+            </div>
         </div>
-        <div class="form-label">
-            <label class="col-sm-2 col-form-label">Номер вопроса:</label>
-            <input name="question" value="@Model.Question" />
+        <div class="form-group row mb-3">
+            <label for="question" class="col-sm-3 col-form-label">Номер вопроса:</label>
+            <div class="col-sm-9">
+                <input name="questionNumber" style="max-width:500px" value="@Model.QuestionNumber" 
+                       class="form-control" readonly>
+            </div>
         </div>
-        <div class="form-label">
-            <label class="col-sm-2 col-form-label">Введите ответ:</label>
-            <input name="answer" value="@Model.Answer" />
+        <div class="form-group row mb-3">
+            <label for="answer" class="col-sm-3 col-form-label">Введите ответ:</label>
+            <div class="col-sm-9">
+                <textarea name="answer" id="answerText" style="max-width:500px" class="form-control"
+                          onkeyup="success()" rows="5">@Model.Answer</textarea>
+            </div>
         </div>
-        <input type="submit" value="Отправить" />
-        <input type="button" value="Очистить" />
+        <div class="form-group row mb-3">
+            <div class="col-sm-12 mt-3">
+                <input type="submit" id="submitBtn" value="Отправить" class="btn btn-primary" disabled>
+                <input type="reset" value="Очистить" class="btn btn-secondary ml-2">
+            </div>
+        </div>
     </form>
 </div>
+
+<script>
+    function increment() {
+        var value = parseInt(document.getElementById('commandNum').value, 10);
+        value = isNaN(value) ? 1 : value;
+        if (value < 10) {
+            value++;
+            document.getElementById('commandNum').value = value;
+        }
+    }
+
+    function decrement() {
+        var value = parseInt(document.getElementById('commandNum').value, 10);
+        value = isNaN(value) ? 1 : value;
+        if (value > 1) {
+            value--;
+            document.getElementById('commandNum').value = value;
+        }
+    }
+
+    function clearAnswerInput() {
+        document.getElementById('answer').value = '';
+    }
+
+    function success() {
+        let answer = document.getElementById("answerText").value;
+        let commandNum = parseInt(document.getElementById("commandNum").value, 10);
+        commandNum = isNaN(commandNum) ? 0 : commandNum;
+
+        if (answer !== '' && commandNum >= 1 && commandNum <= 10) {
+            document.getElementById('submitBtn').disabled = false;
+        } else {
+            document.getElementById('submitBtn').disabled = true;
+        }
+    }
+</script>
