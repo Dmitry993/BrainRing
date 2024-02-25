@@ -7,6 +7,7 @@ namespace BrainRing.Data.Context
     {
         public ApplicationContext(DbContextOptions options) : base(options)
         {
+            
             Database.EnsureCreated();
         }
 

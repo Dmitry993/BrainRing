@@ -33,7 +33,7 @@
         <div class="form-group row mb-3">
             <div class="col-sm-12 mt-3">
                 <input type="submit" id="submitBtn" value="Отправить" class="btn btn-primary" disabled>
-                <input type="reset" value="Очистить" class="btn btn-secondary ml-2">
+                <input value="Очистить" class="btn btn-secondary" onclick="clearAnswerTextArea()">
             </div>
         </div>
     </form>
@@ -58,8 +58,9 @@
         }
     }
 
-    function clearAnswerInput() {
-        document.getElementById('answer').value = '';
+    function clearAnswerTextArea() {
+        document.getElementById('answerText').value = '';
+        document.getElementById('submitBtn').disabled = true;
     }
 
     function success() {

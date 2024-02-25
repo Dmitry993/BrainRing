@@ -1,0 +1,82 @@
+﻿@model IEnumerable<BrainRing.ViewModels.TeamAnswerRowViewModel>;
+
+@{
+    ViewData["Title"] = "Admin";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div>
+            <table class="table table-striped" id="answersTable">
+                <thead>
+                    <tr>
+                        <th>Номер вопроса п/п</th>
+                        <th>Ответ команды 1</th>
+                        <th>Ответ команды 2</th>
+                        <th>Ответ команды 3</th>
+                        <th>Ответ команды 4</th>
+                        <th>Ответ команды 5</th>
+                        <th>Ответ команды 6</th>
+                        <th>Ответ команды 7</th>
+                        <th>Ответ команды 8</th>
+                        <th>Ответ команды 9</th>
+                        <th>Ответ команды 10</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@("Вопрос" + item.QuestionNumber)</td>
+
+                            @for (int i = 1; i <= 10; i++)
+                            {
+                                var id = string.Format("row{0}col{1}", item.QuestionNumber, i);
+                                var cell = item.Cells.FirstOrDefault(cell => cell.CommandNumber == i);
+                                <td id="@id">@(cell != null ? string.Format("{0} - {1}", cell.Answer, 
+                                    cell.AnswerTime.ToString("HH':'mm':'ss")) : "")</td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <script src="~/js/signalr/dist/browser/signalr.js"></script>
+        <script>
+            const connection = new signalR.HubConnectionBuilder().withUrl("/answerHub").build();
+
+            connection.start()
+                .catch(function (err) {
+                    return console.error(err.toString());
+                });
+
+            connection.on("updateAnswers", function (data) {
+                if (data !== null) {
+                    let cellId = 'row' + data.questionNumber + 'col' + data.commandNumber;
+                    let cell = document.getElementById(cellId)
+                    let cellContent = data.answer + '-' + data.answerTime.split('.')[0];
+
+                    if (cell === null) {
+                        let table = document.getElementById("answersTable");
+                        let row = table.insertRow();
+                        let cell0 = row.insertCell();
+                        cell0.textContent = 'Вопрос' + data.questionNumber
+
+                        for (let i = 1; i <= 10; i++) {
+                            let cell = row.insertCell();
+                            cell.id = 'row' + data.questionNumber + 'col' + i;
+
+                            if (cell.id === cellId) {
+                                cell.textContent = cellContent;
+                            }
+                        }
+                    }
+                    else {
+                        cell.textContent = cellContent;
+                    }
+                }
+            });
+
+        </script>
+

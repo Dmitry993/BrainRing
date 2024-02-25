@@ -4,25 +4,22 @@ using BrainRing.ViewModels;
 
 namespace BrainRing.Services
 {
-    public class TeamAnswerService(ITeamAnswerRepository answerRepository) : ITeamAnswerService
+    public class TeamAnswerService(ITeamAnswerRepository repository) : ITeamAnswerService
     {
         public async Task<TeamAnswerViewModel> AddTeamAnswer(TeamAnswerViewModel answerViewModel)
         {
-            var teamAnswerModel = new TeamAnswer
-            {
-                CommandNumber = answerViewModel.CommandNumber,
-                QuestionNumber = answerViewModel.QuestionNumber,
-                Answer = answerViewModel.Answer,
-                AnswerTime = TimeOnly.FromDateTime(DateTime.Now)
-            };
-
-            await answerRepository.AddTeamAnswer(teamAnswerModel);
+            await repository.AddTeamAnswer(answerViewModel);
 
             return new TeamAnswerViewModel
             {
-                CommandNumber = teamAnswerModel.CommandNumber,
-                QuestionNumber = ++teamAnswerModel.QuestionNumber,
+                CommandNumber = answerViewModel.CommandNumber,
+                QuestionNumber = ++answerViewModel.QuestionNumber,
             };
+        }
+
+        public async Task<IEnumerable<TeamAnswerRowViewModel>> GetAnswerRows()
+        {
+            return await repository.GetAnswerRows();
         }
     }
 }

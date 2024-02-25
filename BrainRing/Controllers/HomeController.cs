@@ -6,11 +6,17 @@ using System;
 
 namespace BrainRing.Controllers
 {
-    public class HomeController(ITeamAnswerService answerService) : Controller
+    public class HomeController(ITeamAnswerService service) : Controller
     {
         public IActionResult Index()
         {
             return View(new TeamAnswerViewModel());
+        }
+
+        public async Task<IActionResult> Admin()
+        {
+            var answerRows = await service.GetAnswerRows();
+            return View(answerRows);
         }
 
         [HttpPost()]
@@ -18,12 +24,12 @@ namespace BrainRing.Controllers
         {
             if ((answerViewModel.CommandNumber is < 1 or > 10) || 
                 string.IsNullOrEmpty(answerViewModel.Answer) ||
-                (answerViewModel.QuestionNumber is < 1 or > 20))
+                answerViewModel.QuestionNumber < 1)
             {
                 throw new ArgumentException();
             }
 
-            var answerModel = await answerService.AddTeamAnswer(answerViewModel);
+            var answerModel = await service.AddTeamAnswer(answerViewModel);
 
             return View("Index", answerModel);
         }
