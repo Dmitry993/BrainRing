@@ -26,7 +26,7 @@ namespace BrainRing.Controllers
                 string.IsNullOrEmpty(answerViewModel.Answer) ||
                 answerViewModel.QuestionNumber < 1)
             {
-                throw new ArgumentException();
+                return RedirectToAction("Index");
             }
 
             var answerModel = await service.AddTeamAnswer(answerViewModel);

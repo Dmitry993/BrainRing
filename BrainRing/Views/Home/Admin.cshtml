@@ -27,7 +27,7 @@
                     @foreach (var item in Model)
                     {
                         <tr>
-                            <td>@("Вопрос" + item.QuestionNumber)</td>
+                            <td>@("Вопрос " + item.QuestionNumber)</td>
 
                             @for (int i = 1; i <= 10; i++)
                             {
@@ -61,7 +61,7 @@
                         let table = document.getElementById("answersTable");
                         let row = table.insertRow();
                         let cell0 = row.insertCell();
-                        cell0.textContent = 'Вопрос' + data.questionNumber
+                        cell0.textContent = 'Вопрос ' + data.questionNumber
 
                         for (let i = 1; i <= 10; i++) {
                             let cell = row.insertCell();
